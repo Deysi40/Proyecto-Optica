@@ -1,6 +1,6 @@
 
 import { Sucursal } from 'src/sucursal/sucursal.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn,  OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
 
 @Entity()
 export class Trabajador {
@@ -19,10 +19,10 @@ export class Trabajador {
   @Column({ length: 20 })
   segundo_apellido: string;
 
-  @Column()
+  @Column({ type: 'date' })
   fecha_nac: Date;
 
-  @Column({ length: 15 })
+  @Column('text')
   genero: string;
 
   @Column({ length: 200 })
@@ -39,4 +39,14 @@ export class Trabajador {
 
   @OneToMany(() => Sucursal, sucursal => sucursal.trabajador)
   sucursales: Sucursal[];
+
+  @BeforeInsert()
+  checkFieldsBeforeInsert() {
+      this.email = this.email.toLowerCase().trim();
+  }
+
+  @BeforeUpdate()
+  checkFieldsBeforeUpdate() {
+      this.checkFieldsBeforeInsert();   
+  }
 }

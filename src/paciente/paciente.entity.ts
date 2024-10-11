@@ -1,7 +1,7 @@
 import { Consulta } from 'src/consulta/consulta.entity';
 import { Sucursal } from 'src/sucursal/sucursal.entity';
 import { Venta } from 'src/venta/venta.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
 
 @Entity()
 export class Paciente {
@@ -20,10 +20,10 @@ export class Paciente {
   @Column({ length: 20 })
   segundo_apellido: string;
 
-  @Column()
+  @Column({ type: 'date' })
   fecha_nac: Date;
 
-  @Column({ length: 15 })
+  @Column('text')
   genero: string;
 
   @Column({ length: 200 })
@@ -43,4 +43,15 @@ export class Paciente {
 
   @OneToMany(() => Consulta, consulta => consulta.paciente)
   consultas: Consulta[];
+
+
+  @BeforeInsert()
+  checkFieldsBeforeInsert() {
+      this.email = this.email.toLowerCase().trim();
+  }
+
+  @BeforeUpdate()
+  checkFieldsBeforeUpdate() {
+      this.checkFieldsBeforeInsert();   
+  }
 }

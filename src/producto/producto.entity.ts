@@ -7,8 +7,8 @@ export class Producto {
   @PrimaryGeneratedColumn()
   id_producto: number;
 
-  @Column({ length: 100 })
-  nombre: string;
+  @Column('varchar', { length: 100, unique: true })
+  titulo: string;
 
   @Column({ type:'varchar' })
   descripcion: string;
@@ -16,7 +16,7 @@ export class Producto {
   @Column('decimal', { precision: 10, scale: 2 })
   precio: number;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('int', {  default: 0})
   stock: number;
 
   @OneToMany(() => Venta, venta => venta.producto)
